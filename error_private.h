@@ -42,16 +42,16 @@ extern "C" {
 /*-****************************************
 *  Customization (error_public.h)
 ******************************************/
-typedef ZSTD_ErrorCode ERR_enum;
-#define PREFIX(name) ZSTD_error_##name
+typedef ZSTD1_ErrorCode ERR_enum;
+#define PREFIX(name) ZSTD1_error_##name
 
 
 /*-****************************************
 *  Error codes handling
 ******************************************/
 #undef ERROR   /* reported already defined on VS 2015 (Rich Geldreich) */
-#define ERROR(name) ZSTD_ERROR(name)
-#define ZSTD_ERROR(name) ((size_t)-PREFIX(name))
+#define ERROR(name) ZSTD1_ERROR(name)
+#define ZSTD1_ERROR(name) ((size_t)-PREFIX(name))
 
 ERR_STATIC unsigned ERR_isError(size_t code) { return (code > ERROR(maxCode)); }
 

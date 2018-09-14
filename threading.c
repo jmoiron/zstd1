@@ -15,9 +15,9 @@
  */
 
 /* create fake symbol to avoid empty trnaslation unit warning */
-int g_ZSTD_threading_useles_symbol;
+int g_ZSTD1_threading_useles_symbol;
 
-#if defined(ZSTD_MULTITHREAD) && defined(_WIN32)
+#if defined(ZSTD1_MULTITHREAD) && defined(_WIN32)
 
 /**
  * Windows minimalist Pthread Wrapper, based on :
@@ -35,12 +35,12 @@ int g_ZSTD_threading_useles_symbol;
 
 static unsigned __stdcall worker(void *arg)
 {
-    ZSTD_pthread_t* const thread = (ZSTD_pthread_t*) arg;
+    ZSTD1_pthread_t* const thread = (ZSTD1_pthread_t*) arg;
     thread->arg = thread->start_routine(thread->arg);
     return 0;
 }
 
-int ZSTD_pthread_create(ZSTD_pthread_t* thread, const void* unused,
+int ZSTD1_pthread_create(ZSTD1_pthread_t* thread, const void* unused,
             void* (*start_routine) (void*), void* arg)
 {
     (void)unused;
@@ -54,7 +54,7 @@ int ZSTD_pthread_create(ZSTD_pthread_t* thread, const void* unused,
         return 0;
 }
 
-int ZSTD_pthread_join(ZSTD_pthread_t thread, void **value_ptr)
+int ZSTD1_pthread_join(ZSTD1_pthread_t thread, void **value_ptr)
 {
     DWORD result;
 
@@ -72,4 +72,4 @@ int ZSTD_pthread_join(ZSTD_pthread_t thread, void **value_ptr)
     }
 }
 
-#endif   /* ZSTD_MULTITHREAD */
+#endif   /* ZSTD1_MULTITHREAD */

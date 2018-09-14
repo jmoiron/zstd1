@@ -8,8 +8,8 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-#ifndef ZSTD_FAST_H
-#define ZSTD_FAST_H
+#ifndef ZSTD1_FAST_H
+#define ZSTD1_FAST_H
 
 #if defined (__cplusplus)
 extern "C" {
@@ -18,18 +18,18 @@ extern "C" {
 #include "mem.h"      /* U32 */
 #include "zstd_compress_internal.h"
 
-void ZSTD_fillHashTable(ZSTD_matchState_t* ms,
-                        ZSTD_compressionParameters const* cParams,
+void ZSTD1_fillHashTable(ZSTD1_matchState_t* ms,
+                        ZSTD1_compressionParameters const* cParams,
                         void const* end);
-size_t ZSTD_compressBlock_fast(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
-size_t ZSTD_compressBlock_fast_extDict(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_fast(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_fast_extDict(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
 
 #if defined (__cplusplus)
 }
 #endif
 
-#endif /* ZSTD_FAST_H */
+#endif /* ZSTD1_FAST_H */

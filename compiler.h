@@ -8,8 +8,8 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-#ifndef ZSTD_COMPILER_H
-#define ZSTD_COMPILER_H
+#ifndef ZSTD1_COMPILER_H
+#define ZSTD1_COMPILER_H
 
 /*-*******************************************************
 *  Compiler specifics
@@ -108,4 +108,4 @@
 #  pragma warning(disable : 4324)        /* disable: C4324: padded structure */
 #endif
 
-#endif /* ZSTD_COMPILER_H */
+#endif /* ZSTD1_COMPILER_H */

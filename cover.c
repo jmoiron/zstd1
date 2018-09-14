@@ -102,7 +102,7 @@ static void COVER_map_clear(COVER_map_t *map) {
  * The map is only guaranteed to be large enough to hold size elements.
  */
 static int COVER_map_init(COVER_map_t *map, U32 size) {
-  map->sizeLog = ZSTD_highbit32(size) + 2;
+  map->sizeLog = ZSTD1_highbit32(size) + 2;
   map->size = (U32)1 << map->sizeLog;
   map->sizeMask = map->size - 1;
   map->data = (COVER_map_pair_t *)malloc(map->size * sizeof(COVER_map_pair_t));
@@ -694,7 +694,7 @@ ZDICTLIB_API size_t ZDICT_trainFromBuffer_cover(
     const size_t dictionarySize = ZDICT_finalizeDictionary(
         dict, dictBufferCapacity, dict + tail, dictBufferCapacity - tail,
         samplesBuffer, samplesSizes, nbSamples, parameters.zParams);
-    if (!ZSTD_isError(dictionarySize)) {
+    if (!ZSTD1_isError(dictionarySize)) {
       DISPLAYLEVEL(2, "Constructed dictionary of size %u\n",
                    (U32)dictionarySize);
     }
@@ -713,8 +713,8 @@ ZDICTLIB_API size_t ZDICT_trainFromBuffer_cover(
  * compiled with multithreaded support.
  */
 typedef struct COVER_best_s {
-  ZSTD_pthread_mutex_t mutex;
-  ZSTD_pthread_cond_t cond;
+  ZSTD1_pthread_mutex_t mutex;
+  ZSTD1_pthread_cond_t cond;
   size_t liveJobs;
   void *dict;
   size_t dictSize;
@@ -727,8 +727,8 @@ typedef struct COVER_best_s {
  */
 static void COVER_best_init(COVER_best_t *best) {
   if (best==NULL) return; /* compatible with init on NULL */
-  (void)ZSTD_pthread_mutex_init(&best->mutex, NULL);
-  (void)ZSTD_pthread_cond_init(&best->cond, NULL);
+  (void)ZSTD1_pthread_mutex_init(&best->mutex, NULL);
+  (void)ZSTD1_pthread_cond_init(&best->cond, NULL);
   best->liveJobs = 0;
   best->dict = NULL;
   best->dictSize = 0;
@@ -743,11 +743,11 @@ static void COVER_best_wait(COVER_best_t *best) {
   if (!best) {
     return;
   }
-  ZSTD_pthread_mutex_lock(&best->mutex);
+  ZSTD1_pthread_mutex_lock(&best->mutex);
   while (best->liveJobs != 0) {
-    ZSTD_pthread_cond_wait(&best->cond, &best->mutex);
+    ZSTD1_pthread_cond_wait(&best->cond, &best->mutex);
   }
-  ZSTD_pthread_mutex_unlock(&best->mutex);
+  ZSTD1_pthread_mutex_unlock(&best->mutex);
 }
 
 /**
@@ -761,8 +761,8 @@ static void COVER_best_destroy(COVER_best_t *best) {
   if (best->dict) {
     free(best->dict);
   }
-  ZSTD_pthread_mutex_destroy(&best->mutex);
-  ZSTD_pthread_cond_destroy(&best->cond);
+  ZSTD1_pthread_mutex_destroy(&best->mutex);
+  ZSTD1_pthread_cond_destroy(&best->cond);
 }
 
 /**
@@ -773,9 +773,9 @@ static void COVER_best_start(COVER_best_t *best) {
   if (!best) {
     return;
   }
-  ZSTD_pthread_mutex_lock(&best->mutex);
+  ZSTD1_pthread_mutex_lock(&best->mutex);
   ++best->liveJobs;
-  ZSTD_pthread_mutex_unlock(&best->mutex);
+  ZSTD1_pthread_mutex_unlock(&best->mutex);
 }
 
 /**
@@ -791,7 +791,7 @@ static void COVER_best_finish(COVER_best_t *best, size_t compressedSize,
   }
   {
     size_t liveJobs;
-    ZSTD_pthread_mutex_lock(&best->mutex);
+    ZSTD1_pthread_mutex_lock(&best->mutex);
     --best->liveJobs;
     liveJobs = best->liveJobs;
     /* If the new dictionary is better */
@@ -814,9 +814,9 @@ static void COVER_best_finish(COVER_best_t *best, size_t compressedSize,
       best->parameters = parameters;
       best->compressedSize = compressedSize;
     }
-    ZSTD_pthread_mutex_unlock(&best->mutex);
+    ZSTD1_pthread_mutex_unlock(&best->mutex);
     if (liveJobs == 0) {
-      ZSTD_pthread_cond_broadcast(&best->cond);
+      ZSTD1_pthread_cond_broadcast(&best->cond);
     }
   }
 }
@@ -873,8 +873,8 @@ static void COVER_tryParameters(void *opaque) {
   /* Check total compressed size */
   {
     /* Pointers */
-    ZSTD_CCtx *cctx;
-    ZSTD_CDict *cdict;
+    ZSTD1_CCtx *cctx;
+    ZSTD1_CDict *cdict;
     void *dst;
     /* Local variables */
     size_t dstCapacity;
@@ -885,12 +885,12 @@ static void COVER_tryParameters(void *opaque) {
       for (i = 0; i < ctx->nbSamples; ++i) {
         maxSampleSize = MAX(ctx->samplesSizes[i], maxSampleSize);
       }
-      dstCapacity = ZSTD_compressBound(maxSampleSize);
+      dstCapacity = ZSTD1_compressBound(maxSampleSize);
       dst = malloc(dstCapacity);
     }
     /* Create the cctx and cdict */
-    cctx = ZSTD_createCCtx();
-    cdict = ZSTD_createCDict(dict, dictBufferCapacity,
+    cctx = ZSTD1_createCCtx();
+    cdict = ZSTD1_createCDict(dict, dictBufferCapacity,
                              parameters.zParams.compressionLevel);
     if (!dst || !cctx || !cdict) {
       goto _compressCleanup;
@@ -898,18 +898,18 @@ static void COVER_tryParameters(void *opaque) {
     /* Compress each sample and sum their sizes (or error) */
     totalCompressedSize = dictBufferCapacity;
     for (i = 0; i < ctx->nbSamples; ++i) {
-      const size_t size = ZSTD_compress_usingCDict(
+      const size_t size = ZSTD1_compress_usingCDict(
           cctx, dst, dstCapacity, ctx->samples + ctx->offsets[i],
           ctx->samplesSizes[i], cdict);
-      if (ZSTD_isError(size)) {
+      if (ZSTD1_isError(size)) {
         totalCompressedSize = ERROR(GENERIC);
         goto _compressCleanup;
       }
       totalCompressedSize += size;
     }
   _compressCleanup:
-    ZSTD_freeCCtx(cctx);
-    ZSTD_freeCDict(cdict);
+    ZSTD1_freeCCtx(cctx);
+    ZSTD1_freeCDict(cdict);
     if (dst) {
       free(dst);
     }
@@ -1033,7 +1033,7 @@ ZDICTLIB_API size_t ZDICT_optimizeTrainFromBuffer_cover(
   /* Fill the output buffer and parameters with output of the best parameters */
   {
     const size_t dictSize = best.dictSize;
-    if (ZSTD_isError(best.compressedSize)) {
+    if (ZSTD1_isError(best.compressedSize)) {
       const size_t compressedSize = best.compressedSize;
       COVER_best_destroy(&best);
       POOL_free(pool);

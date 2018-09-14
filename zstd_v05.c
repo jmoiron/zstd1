@@ -287,8 +287,8 @@ MEM_STATIC size_t MEM_readLEST(const void* memPtr)
     You can contact the author at :
     - zstd homepage : http://www.zstd.net
 */
-#ifndef ZSTD_STATIC_H
-#define ZSTD_STATIC_H
+#ifndef ZSTD1_STATIC_H
+#define ZSTD1_STATIC_H
 
 /* The prototypes defined within this file are considered experimental.
  * They should not be used in the context DLL as they may change in the future.
@@ -423,8 +423,8 @@ size_t ZSTDv05_decompressBlock(ZSTDv05_DCtx* dctx, void* dst, size_t dstCapacity
     You can contact the author at :
     - zstd source repository : https://github.com/Cyan4973/zstd
 */
-#ifndef ZSTD_CCOMMON_H_MODULE
-#define ZSTD_CCOMMON_H_MODULE
+#ifndef ZSTD1_CCOMMON_H_MODULE
+#define ZSTD1_CCOMMON_H_MODULE
 
 
 

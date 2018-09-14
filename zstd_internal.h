@@ -8,8 +8,8 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-#ifndef ZSTD_CCOMMON_H_MODULE
-#define ZSTD_CCOMMON_H_MODULE
+#ifndef ZSTD1_CCOMMON_H_MODULE
+#define ZSTD1_CCOMMON_H_MODULE
 
 /* this module contains definitions which must be identical
  * across compression, decompression and dictBuilder.
@@ -22,11 +22,11 @@
 #include "compiler.h"
 #include "mem.h"
 #include "error_private.h"
-#define ZSTD_STATIC_LINKING_ONLY
+#define ZSTD1_STATIC_LINKING_ONLY
 #include "zstd.h"
-#define FSE_STATIC_LINKING_ONLY
+#define FSE1_STATIC_LINKING_ONLY
 #include "fse.h"
-#define HUF_STATIC_LINKING_ONLY
+#define HUF1_STATIC_LINKING_ONLY
 #include "huf.h"
 #ifndef XXH_STATIC_LINKING_ONLY
 #  define XXH_STATIC_LINKING_ONLY  /* XXH64_state_t */
@@ -42,7 +42,7 @@ extern "C" {
 /*-*************************************
 *  Debug
 ***************************************/
-#if defined(ZSTD_DEBUG) && (ZSTD_DEBUG>=1)
+#if defined(ZSTD1_DEBUG) && (ZSTD1_DEBUG>=1)
 #  include <assert.h>
 #else
 #  ifndef assert
@@ -50,12 +50,12 @@ extern "C" {
 #  endif
 #endif
 
-#define ZSTD_STATIC_ASSERT(c) { enum { ZSTD_static_assert = 1/(int)(!!(c)) }; }
+#define ZSTD1_STATIC_ASSERT(c) { enum { ZSTD1_static_assert = 1/(int)(!!(c)) }; }
 
-#if defined(ZSTD_DEBUG) && (ZSTD_DEBUG>=2)
+#if defined(ZSTD1_DEBUG) && (ZSTD1_DEBUG>=2)
 #  include <stdio.h>
 extern int g_debuglog_enable;
-/* recommended values for ZSTD_DEBUG display levels :
+/* recommended values for ZSTD1_DEBUG display levels :
  * 1 : no display, enables assert() only
  * 2 : reserved for currently active debug path
  * 3 : events once per object lifetime (CCtx, CDict, etc.)
@@ -63,11 +63,11 @@ extern int g_debuglog_enable;
  * 5 : events once per block
  * 6 : events once per sequence (*very* verbose) */
 #  define RAWLOG(l, ...) {                                      \
-                if ((g_debuglog_enable) & (l<=ZSTD_DEBUG)) {    \
+                if ((g_debuglog_enable) & (l<=ZSTD1_DEBUG)) {    \
                     fprintf(stderr, __VA_ARGS__);               \
             }   }
 #  define DEBUGLOG(l, ...) {                                    \
-                if ((g_debuglog_enable) & (l<=ZSTD_DEBUG)) {    \
+                if ((g_debuglog_enable) & (l<=ZSTD1_DEBUG)) {    \
                     fprintf(stderr, __FILE__ ": " __VA_ARGS__); \
                     fprintf(stderr, " \n");                     \
             }   }
@@ -91,11 +91,11 @@ extern int g_debuglog_enable;
 /*-*************************************
 *  Common constants
 ***************************************/
-#define ZSTD_OPT_NUM    (1<<12)
+#define ZSTD1_OPT_NUM    (1<<12)
 
-#define ZSTD_REP_NUM      3                 /* number of repcodes */
-#define ZSTD_REP_MOVE     (ZSTD_REP_NUM-1)
-static const U32 repStartValue[ZSTD_REP_NUM] = { 1, 4, 8 };
+#define ZSTD1_REP_NUM      3                 /* number of repcodes */
+#define ZSTD1_REP_MOVE     (ZSTD1_REP_NUM-1)
+static const U32 repStartValue[ZSTD1_REP_NUM] = { 1, 4, 8 };
 
 #define KB *(1 <<10)
 #define MB *(1 <<20)
@@ -108,16 +108,16 @@ static const U32 repStartValue[ZSTD_REP_NUM] = { 1, 4, 8 };
 #define BIT1   2
 #define BIT0   1
 
-#define ZSTD_WINDOWLOG_ABSOLUTEMIN 10
-#define ZSTD_WINDOWLOG_DEFAULTMAX 27 /* Default maximum allowed window log */
-static const size_t ZSTD_fcs_fieldSize[4] = { 0, 2, 4, 8 };
-static const size_t ZSTD_did_fieldSize[4] = { 0, 1, 2, 4 };
+#define ZSTD1_WINDOWLOG_ABSOLUTEMIN 10
+#define ZSTD1_WINDOWLOG_DEFAULTMAX 27 /* Default maximum allowed window log */
+static const size_t ZSTD1_fcs_fieldSize[4] = { 0, 2, 4, 8 };
+static const size_t ZSTD1_did_fieldSize[4] = { 0, 1, 2, 4 };
 
-#define ZSTD_FRAMEIDSIZE 4
-static const size_t ZSTD_frameIdSize = ZSTD_FRAMEIDSIZE;  /* magic number size */
+#define ZSTD1_FRAMEIDSIZE 4
+static const size_t ZSTD1_frameIdSize = ZSTD1_FRAMEIDSIZE;  /* magic number size */
 
-#define ZSTD_BLOCKHEADERSIZE 3   /* C standard doesn't allow `static const` variable to be init using another `static const` variable */
-static const size_t ZSTD_blockHeaderSize = ZSTD_BLOCKHEADERSIZE;
+#define ZSTD1_BLOCKHEADERSIZE 3   /* C standard doesn't allow `static const` variable to be init using another `static const` variable */
+static const size_t ZSTD1_blockHeaderSize = ZSTD1_BLOCKHEADERSIZE;
 typedef enum { bt_raw, bt_rle, bt_compressed, bt_reserved } blockType_e;
 
 #define MIN_SEQUENCES_SIZE 1 /* nbSeq==0 */
@@ -183,13 +183,13 @@ static const U32 OF_defaultNormLog = OF_DEFAULTNORMLOG;
 /*-*******************************************
 *  Shared functions to include for inlining
 *********************************************/
-static void ZSTD_copy8(void* dst, const void* src) { memcpy(dst, src, 8); }
-#define COPY8(d,s) { ZSTD_copy8(d,s); d+=8; s+=8; }
+static void ZSTD1_copy8(void* dst, const void* src) { memcpy(dst, src, 8); }
+#define COPY8(d,s) { ZSTD1_copy8(d,s); d+=8; s+=8; }
 
-/*! ZSTD_wildcopy() :
+/*! ZSTD1_wildcopy() :
  *  custom version of memcpy(), can overwrite up to WILDCOPY_OVERLENGTH bytes (if length==0) */
 #define WILDCOPY_OVERLENGTH 8
-MEM_STATIC void ZSTD_wildcopy(void* dst, const void* src, ptrdiff_t length)
+MEM_STATIC void ZSTD1_wildcopy(void* dst, const void* src, ptrdiff_t length)
 {
     const BYTE* ip = (const BYTE*)src;
     BYTE* op = (BYTE*)dst;
@@ -199,7 +199,7 @@ MEM_STATIC void ZSTD_wildcopy(void* dst, const void* src, ptrdiff_t length)
     while (op < oend);
 }
 
-MEM_STATIC void ZSTD_wildcopy_e(void* dst, const void* src, void* dstEnd)   /* should be faster for decoding, but strangely, not verified on all platform */
+MEM_STATIC void ZSTD1_wildcopy_e(void* dst, const void* src, void* dstEnd)   /* should be faster for decoding, but strangely, not verified on all platform */
 {
     const BYTE* ip = (const BYTE*)src;
     BYTE* op = (BYTE*)dst;
@@ -231,16 +231,16 @@ typedef struct {
     U32   longLengthPos;
 } seqStore_t;
 
-const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
-void ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
+const seqStore_t* ZSTD1_getSeqStore(const ZSTD1_CCtx* ctx);   /* compress & dictBuilder */
+void ZSTD1_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
 
 /* custom memory allocation functions */
-void* ZSTD_malloc(size_t size, ZSTD_customMem customMem);
-void* ZSTD_calloc(size_t size, ZSTD_customMem customMem);
-void ZSTD_free(void* ptr, ZSTD_customMem customMem);
+void* ZSTD1_malloc(size_t size, ZSTD1_customMem customMem);
+void* ZSTD1_calloc(size_t size, ZSTD1_customMem customMem);
+void ZSTD1_free(void* ptr, ZSTD1_customMem customMem);
 
 
-MEM_STATIC U32 ZSTD_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus */
+MEM_STATIC U32 ZSTD1_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus */
 {
     assert(val != 0);
     {
@@ -264,11 +264,11 @@ MEM_STATIC U32 ZSTD_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus 
 }
 
 
-/* ZSTD_invalidateRepCodes() :
+/* ZSTD1_invalidateRepCodes() :
  * ensures next compression will not use repcodes from previous block.
  * Note : only works with regular variant;
  *        do not use with extDict variant ! */
-void ZSTD_invalidateRepCodes(ZSTD_CCtx* cctx);   /* zstdmt, adaptive_compression (shouldn't get this definition from here) */
+void ZSTD1_invalidateRepCodes(ZSTD1_CCtx* cctx);   /* zstdmt, adaptive_compression (shouldn't get this definition from here) */
 
 
 typedef struct {
@@ -277,14 +277,14 @@ typedef struct {
     U32 origSize;
 } blockProperties_t;
 
-/*! ZSTD_getcBlockSize() :
+/*! ZSTD1_getcBlockSize() :
  *  Provides the size of compressed block from block header `src` */
 /* Used by: decompress, fullbench (does not get its definition from here) */
-size_t ZSTD_getcBlockSize(const void* src, size_t srcSize,
+size_t ZSTD1_getcBlockSize(const void* src, size_t srcSize,
                           blockProperties_t* bpPtr);
 
 #if defined (__cplusplus)
 }
 #endif
 
-#endif   /* ZSTD_CCOMMON_H_MODULE */
+#endif   /* ZSTD1_CCOMMON_H_MODULE */

@@ -8,8 +8,8 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-#ifndef ZSTD_V03_H_298734209782
-#define ZSTD_V03_H_298734209782
+#ifndef ZSTD1_V03_H_298734209782
+#define ZSTD1_V03_H_298734209782
 
 #if defined (__cplusplus)
 extern "C" {
@@ -69,10 +69,10 @@ size_t ZSTDv03_nextSrcSizeToDecompress(ZSTDv03_Dctx* dctx);
 size_t ZSTDv03_decompressContinue(ZSTDv03_Dctx* dctx, void* dst, size_t maxDstSize, const void* src, size_t srcSize);
 /**
   Use above functions alternatively.
-  ZSTD_nextSrcSizeToDecompress() tells how much bytes to provide as 'srcSize' to ZSTD_decompressContinue().
-  ZSTD_decompressContinue() will use previous data blocks to improve compression if they are located prior to current block.
+  ZSTD1_nextSrcSizeToDecompress() tells how much bytes to provide as 'srcSize' to ZSTD1_decompressContinue().
+  ZSTD1_decompressContinue() will use previous data blocks to improve compression if they are located prior to current block.
   Result is the number of bytes regenerated within 'dst'.
-  It can be zero, which is not an error; it just means ZSTD_decompressContinue() has decoded some header.
+  It can be zero, which is not an error; it just means ZSTD1_decompressContinue() has decoded some header.
 */
 
 /* *************************************
@@ -85,4 +85,4 @@ size_t ZSTDv03_decompressContinue(ZSTDv03_Dctx* dctx, void* dst, size_t maxDstSi
 }
 #endif
 
-#endif /* ZSTD_V03_H_298734209782 */
+#endif /* ZSTD1_V03_H_298734209782 */

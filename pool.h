@@ -17,7 +17,7 @@ extern "C" {
 
 
 #include <stddef.h>   /* size_t */
-#define ZSTD_STATIC_LINKING_ONLY   /* ZSTD_customMem */
+#define ZSTD1_STATIC_LINKING_ONLY   /* ZSTD1_customMem */
 #include "zstd.h"
 
 typedef struct POOL_ctx_s POOL_ctx;
@@ -30,7 +30,7 @@ typedef struct POOL_ctx_s POOL_ctx;
 */
 POOL_ctx* POOL_create(size_t numThreads, size_t queueSize);
 
-POOL_ctx* POOL_create_advanced(size_t numThreads, size_t queueSize, ZSTD_customMem customMem);
+POOL_ctx* POOL_create_advanced(size_t numThreads, size_t queueSize, ZSTD1_customMem customMem);
 
 /*! POOL_free() :
     Free a thread pool returned by POOL_create().

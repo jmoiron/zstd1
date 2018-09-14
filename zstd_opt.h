@@ -8,8 +8,8 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-#ifndef ZSTD_OPT_H
-#define ZSTD_OPT_H
+#ifndef ZSTD1_OPT_H
+#define ZSTD1_OPT_H
 
 #if defined (__cplusplus)
 extern "C" {
@@ -17,26 +17,26 @@ extern "C" {
 
 #include "zstd_compress_internal.h"
 
-void ZSTD_updateTree(
-        ZSTD_matchState_t* ms, ZSTD_compressionParameters const* cParams,
-        const BYTE* ip, const BYTE* iend);  /* used in ZSTD_loadDictionaryContent() */
+void ZSTD1_updateTree(
+        ZSTD1_matchState_t* ms, ZSTD1_compressionParameters const* cParams,
+        const BYTE* ip, const BYTE* iend);  /* used in ZSTD1_loadDictionaryContent() */
 
-size_t ZSTD_compressBlock_btopt(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
-size_t ZSTD_compressBlock_btultra(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_btopt(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_btultra(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
 
-size_t ZSTD_compressBlock_btopt_extDict(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
-size_t ZSTD_compressBlock_btultra_extDict(
-        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        ZSTD_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_btopt_extDict(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
+size_t ZSTD1_compressBlock_btultra_extDict(
+        ZSTD1_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD1_REP_NUM],
+        ZSTD1_compressionParameters const* cParams, void const* src, size_t srcSize);
 
 #if defined (__cplusplus)
 }
 #endif
 
-#endif /* ZSTD_OPT_H */
+#endif /* ZSTD1_OPT_H */

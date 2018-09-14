@@ -1,4 +1,4 @@
-package zstd
+package zstd1
 
 import (
 	"bytes"
